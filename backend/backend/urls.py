@@ -9,6 +9,7 @@ urlpatterns = [
     #path('', include(home.urls)),
     path('', include('categories.urls')),
     path('', include('recipes.urls')),
+    path('', include('contact.urls')),
 ]
 
 if settings.DEBUG:
