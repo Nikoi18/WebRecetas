@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'autoslug',
     'recipes',
     'contact',
+    'security',
 ]
 
 MIDDLEWARE = [
