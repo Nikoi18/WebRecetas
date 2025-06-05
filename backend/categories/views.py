@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Category
+from recipes.models import Recipe
 from .serializers import CategorySerializer
 from http import HTTPStatus
 from rest_framework.exceptions import NotFound, bad_request
@@ -55,10 +56,15 @@ class CategoriesDetailAPIView(APIView):
     def delete(self, request, id):
         try:
             data = Category.objects.filter(pk=id).get()
-            Category.objects.filter(pk=id).delete()
-            return Response({"estado":"ok", "mensaje":"Categoria eliminada correctamente"}, status=HTTPStatus.OK)
+            
         except Category.DoesNotExist:
             raise Http404
+    
+        if Recipe.objects.filter(category_id=id).exists():
+            return Response({"error":"inesperado"}, status=HTTPStatus.BAD_REQUEST)
+        
+        Category.objects.filter(pk=id).delete()
+        return Response({"estado":"ok", "mensaje":"Categoria eliminada correctamente"}, status=HTTPStatus.OK)
              
 
 
