@@ -1,6 +1,8 @@
 from django.db import models
 from autoslug import AutoSlugField
 from categories.models import Category
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -8,6 +10,7 @@ from categories.models import Category
 
 
 class Recipe(models.Model):
+    user = models.ForeignKey(User, models.DO_NOTHING, verbose_name='Usuario', default=1)
     category = models.ForeignKey(Category, models.DO_NOTHING, verbose_name='Categoría', null= False)
     name = models.CharField(max_length=200, verbose_name='Nombre', null= False)
     slug = AutoSlugField(populate_from='name', max_length=100) # type: ignore

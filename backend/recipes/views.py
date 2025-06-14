@@ -11,6 +11,10 @@ from categories.models import Category
 from http import HTTPStatus
 import os
 from datetime import datetime
+from security.decorators import logueado
+from  django.conf import settings
+from jose import jwt
+
 
 
 
@@ -22,7 +26,7 @@ class RecetasListAPIView(APIView):
         datos_jason = RecipeSerializer(data, many= True)
         return Response(datos_jason.data, status=HTTPStatus.OK)
     
-
+    @logueado()
     def post(self, request):
         required_fields ={
             "name":"name",
@@ -56,6 +60,10 @@ class RecetasListAPIView(APIView):
             except Category.DoesNotExist:
                 return Response({"Error": "La categoría no existe"}, status=HTTPStatus.NOT_FOUND)
 
+            header = request.headers.get('Authorization').split(' ')
+            resuelto = jwt.decode(header[1], settings.SECRET_KEY, algorithms=['HS512'])
+
+
             try:
                 Recipe.objects.create(
                     name=request.data["name"],
@@ -63,7 +71,7 @@ class RecetasListAPIView(APIView):
                     description=request.data["description"],
                     category_id=request.data["category_id"],
                     date=datetime.now(),
-                    photo=photo)
+                    photo=photo, user_id=resuelto['id'])
                 return Response({"estado":"ok", "mensaje":"Receta creada correctamente"}, status=HTTPStatus.CREATED)
             
             except Exception as e:
@@ -80,7 +88,8 @@ class RecetasDetailAPIView(APIView):
             return Response({"data":{"id": data.pk, "Nombre": data.name, "Slug": data.slug, "Tiempo": data.time, "Nombre foto": data.photo,"Imagen": f"http://127.0.0.1:8000/media/upload/recipes/{data.photo}", "Descripcion": data.description, "Fecha": DateFormat(data.date).format("d-m-Y"), "Categoria": data.category.name}}, status=HTTPStatus.OK)
         except Recipe.DoesNotExist:
             raise NotFound('Receta no encontrada', HTTPStatus.NOT_FOUND)
-        
+
+    @logueado()   
     def put(self, request, id):
         required_fields ={
             "name":"name",
@@ -110,7 +119,8 @@ class RecetasDetailAPIView(APIView):
             return Response({"estado":"ok", "mensaje":"Receta actualizada correctamente"}, status=HTTPStatus.OK)
         except Exception as e:
             return Response({"error":"ocurrior un error inesperado"}, status=HTTPStatus.NOT_FOUND)
-        
+
+    @logueado()     
     def delete(self, request, id):
         try:
             data = Recipe.objects.filter(pk=id).get()

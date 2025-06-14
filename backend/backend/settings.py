@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'autoslug',
     'recipes',
     'contact',
+    'security',
+    'recetas_helper'
 ]
 
 MIDDLEWARE = [
@@ -80,14 +82,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':  'MySQL80',
+        'NAME':  'prueba1',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
-        'OPTIONS': {
-            'autocommit': True,
-        },
+        
 
     }
 }
@@ -132,6 +132,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 
 # Default primary key field type
