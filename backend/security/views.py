@@ -16,13 +16,6 @@ import time
 
 
 
- 
-
-
-
-
-# Create your views here.
-
 class RegisterListAPIView(APIView):
     
     def post(self, request):

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'recipes',
     'contact',
     'security',
+    'recetas_helper'
 ]
 
 MIDDLEWARE = [

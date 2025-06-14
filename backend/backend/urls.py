@@ -10,6 +10,8 @@ urlpatterns = [
     path('', include('categories.urls')),
     path('', include('recipes.urls')),
     path('', include('contact.urls')),
+    path('', include('recetas_helper.urls')),
+
     #path('', include('home.urls')),
 ]
 

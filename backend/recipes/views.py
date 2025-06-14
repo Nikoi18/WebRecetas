@@ -12,7 +12,8 @@ from http import HTTPStatus
 import os
 from datetime import datetime
 from security.decorators import logueado
-
+from  django.conf import settings
+from jose import jwt
 
 
 
@@ -59,6 +60,10 @@ class RecetasListAPIView(APIView):
             except Category.DoesNotExist:
                 return Response({"Error": "La categoría no existe"}, status=HTTPStatus.NOT_FOUND)
 
+            header = request.headers.get('Authorization').split(' ')
+            resuelto = jwt.decode(header[1], settings.SECRET_KEY, algorithms=['HS512'])
+
+
             try:
                 Recipe.objects.create(
                     name=request.data["name"],
@@ -66,7 +71,7 @@ class RecetasListAPIView(APIView):
                     description=request.data["description"],
                     category_id=request.data["category_id"],
                     date=datetime.now(),
-                    photo=photo)
+                    photo=photo, user_id=resuelto['id'])
                 return Response({"estado":"ok", "mensaje":"Receta creada correctamente"}, status=HTTPStatus.CREATED)
             
             except Exception as e:
