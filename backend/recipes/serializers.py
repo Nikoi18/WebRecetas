@@ -9,12 +9,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     categorie = serializers.CharField(source='category.name')
     date = serializers.DateTimeField(format='%d-%m-%Y', read_only=True)
     image = serializers.SerializerMethodField()
+    user = serializers.ReadOnlyField(source='user.first_name')
 
 
     class Meta:
         model = Recipe
         #fields = '__all__'
-        fields = ("id", "name", "slug", "time", "photo", "description", "date", "categorie", "image")
+        fields = ("id", "name", "slug", "time", "photo", "description", "date", "categorie", "image", "user_id", "user")
 
     def get_image(self, obj):
         return f"{settings.MEDIA_URL}upload/recipes/{obj.photo}"

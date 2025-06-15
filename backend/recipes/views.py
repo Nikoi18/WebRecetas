@@ -85,7 +85,7 @@ class RecetasDetailAPIView(APIView):
     def get(self, request, id):
         try:
             data = Recipe.objects.filter(id=id).get()
-            return Response({"data":{"id": data.pk, "Nombre": data.name, "Slug": data.slug, "Tiempo": data.time, "Nombre foto": data.photo,"Imagen": f"http://127.0.0.1:8000/media/upload/recipes/{data.photo}", "Descripcion": data.description, "Fecha": DateFormat(data.date).format("d-m-Y"), "Categoria": data.category.name}}, status=HTTPStatus.OK)
+            return Response({"data":{"id": data.pk, "Nombre": data.name, "Slug": data.slug, "Tiempo": data.time, "Nombre foto": data.photo,"Imagen": f"http://127.0.0.1:8000/media/upload/recipes/{data.photo}", "Descripcion": data.description, "Fecha": DateFormat(data.date).format("d-m-Y"),"user_id": data.user.pk, "user": data.user.first_name ,"Categoria": data.category.name}}, status=HTTPStatus.OK)
         except Recipe.DoesNotExist:
             raise NotFound('Receta no encontrada', HTTPStatus.NOT_FOUND)
 
